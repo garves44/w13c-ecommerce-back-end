@@ -45,43 +45,43 @@ router.get('/', (req, res) => {
 // get one product
 router.get('/:id', (req, res) => {
   Product.findAll({
-    where: {
-      id: req.params.id
-    },
-    attributes: [
-      'id',
-      'product_name',
-      'price',
-      'stock',
-      'category_id',
-      'created_at',
-      [
-        // sequelize.literal query here
-      ]
-    ],
-    include: [{
-        model: Category,
-        attributes: ['id', 'category_name']
+      where: {
+        id: req.params.id
       },
-      {
-        model: Tag,
-        attributes: ['id', 'tag_name']
+      attributes: [
+        'id',
+        'product_name',
+        'price',
+        'stock',
+        'category_id',
+        'created_at',
+        [
+          // sequelize.literal query here 
+        ]
+      ],
+      include: [{
+          model: Category,
+          attributes: ['id', 'category_name']
+        },
+        {
+          model: Tag,
+          attributes: ['id', 'tag_name']
+        }
+      ]
+    })
+    .then(dbPostData => {
+      if (!dbPostData) {
+        res.status(404).json({
+          message: 'No Product found with this ID!'
+        });
+        return;
       }
-    ]
-  })
-  .then(dbPostData => {
-    if(!dbPostData) {
-      res.status(404).json({
-        message: 'No Product found with this ID!'
-      });
-      return;
-    }
-    res.json(dbPostData);
-  })
-  .catch(err => {
-    console.log(err);
-    res.status(500).json(err);
-  });
+      res.json(dbPostData);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 // create new product
