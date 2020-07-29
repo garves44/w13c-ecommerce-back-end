@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
         'category_name',
         'created_at',
         [
-
+          // sequelize.literal query here
         ]
       ],
       order: [
