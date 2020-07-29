@@ -3,6 +3,13 @@ const Product = require('./Product');
 const Category = require('./Category');
 const Tag = require('./Tag');
 const ProductTag = require('./ProductTag');
+const fs = require('fs');
+const path = require('path');
+const sequelize = require('../config/connection');
+
+
+
+// =============ASSOCIATIONS================
 
 // Products belongsTo Category
 Product.belongsTo(Category, {
@@ -32,5 +39,5 @@ module.exports = {
   Product,
   Category,
   Tag,
-  ProductTag,
+  ProductTag
 };
