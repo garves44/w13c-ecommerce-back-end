@@ -3,7 +3,10 @@ const {
   Category,
   Product
 } = require('../../models');
-const { update } = require('../../models/Tag');
+const {
+  update
+} = require('../../models/Tag');
+const sequelize = require('../../config/connection');
 
 // The `/api/categories` endpoint
 
@@ -14,7 +17,8 @@ router.get('/', (req, res) => {
         'category_name',
         'created_at',
         [
-          // sequelize.literal query here
+          sequelize.literal('(SELECT * FROM Category;)'),
+          'all_category'
         ]
       ],
       order: [
@@ -42,7 +46,8 @@ router.get('/:id', (req, res) => {
         'category_name',
         'created_at',
         [
-
+          sequelize.literal('(SELECT * FROM Category WHERE Category.id = Product.category_id;)'),
+          'single_category'
         ]
       ],
       include: [{
@@ -67,43 +72,45 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   Category.create({
-    category_name: req.param.category_name
-  })
-  .then(dbPostData => res.json(dbPostData))
-  .catch(err => {
-    console.log(err);
-    res.status(500).json(err);
-  });
+      category_name: req.param.category_name
+    })
+    .then(dbPostData => res.json(dbPostData))
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 router.put('/:id', (req, res) => {
-  Category.update(req.body, { Category })
-  .then(updatedPostData => res.json(updatedPostData))
-  .catch(err => {
-    console.log(err);
-    res.status(400).json(err);
-  });
+  Category.update(req.body, {
+      Category
+    })
+    .then(updatedPostData => res.json(updatedPostData))
+    .catch(err => {
+      console.log(err);
+      res.status(400).json(err);
+    });
 });
 
 router.delete('/:id', (req, res) => {
   Category.destroy({
-    where: {
-      id: req.params.id
-    }
-  })
-  .then(dbPostData => {
-    if(!dbPostData) {
-      res.status(404).json({
-        message: 'No Category with this ID!'
-      });
-      return;
-    }
-    res.json(dbPostData);
-  })
-  .catch(err => {
-    console.log(err);
-    res.status(500).json(err);
-  });
+      where: {
+        id: req.params.id
+      }
+    })
+    .then(dbPostData => {
+      if (!dbPostData) {
+        res.status(404).json({
+          message: 'No Category with this ID!'
+        });
+        return;
+      }
+      res.json(dbPostData);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 module.exports = router;

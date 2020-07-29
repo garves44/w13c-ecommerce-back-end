@@ -19,7 +19,8 @@ router.get('/', (req, res) => {
         'category_id',
         'created_at',
         [
-          // sequelize.literal query here
+          sequelize.literal('(SELECT * FROM Product;)'),
+          'all_product'
         ]
       ],
       order: [
@@ -56,7 +57,8 @@ router.get('/:id', (req, res) => {
         'category_id',
         'created_at',
         [
-          // sequelize.literal query here 
+          sequelize.literal('(SELECT * FROM Product WHERE Product.category_id = Category.id;)'),
+          'single_product'
         ]
       ],
       include: [{

@@ -15,7 +15,8 @@ router.get('/', (req, res) => {
         'tag_name',
         'created_at',
         [
-          //Sequelize.literal query here
+          sequelize.literal('(SELECT * FROM Tag;)'),
+          'all_product'
         ]
       ],
       order: [
@@ -48,7 +49,8 @@ router.get('/:id', (req, res) => {
         'tag_name',
         'created_at',
         [
-          //sequelize.literal query
+          sequelize.literal('(SELECT * FROM Tag WHERE Tag.id = Product.tag_id;)'),
+          'single_tag'
         ]
       ],
       include: [{
