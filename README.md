@@ -29,7 +29,7 @@ for additional questions
 Link to the github repo containing the program:
 https://github.com/garves44/w13c-ecommerce-back-end
 Link to the YouTube video walk threw DEMO:
-https://www.youtube.com/watch?v=XZGXYtU2Zow&feature=youtu.be
+https://www.youtube.com/watch?v=HiK3-KFTWKw&feature=youtu.be
 
 ![](/assets/images/Capture.PNG) 
 
