@@ -5,6 +5,7 @@ const {
   Tag,
   ProductTag
 } = require('../../models');
+const sequelize = require('../../config/connection');
 
 // The `/api/products` endpoint
 
@@ -18,10 +19,6 @@ router.get('/', (req, res) => {
         'stock',
         'category_id',
         'created_at',
-        [
-          sequelize.literal('(SELECT * FROM Product;)'),
-          'all_product'
-        ]
       ],
       order: [
         ['created_at', 'DESC']
@@ -56,10 +53,6 @@ router.get('/:id', (req, res) => {
         'stock',
         'category_id',
         'created_at',
-        [
-          sequelize.literal('(SELECT * FROM Product WHERE Product.category_id = Category.id;)'),
-          'single_product'
-        ]
       ],
       include: [{
           model: Category,

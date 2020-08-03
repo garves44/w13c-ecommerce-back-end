@@ -1,43 +1,47 @@
 // import models
-const Product = require('./Product');
-const Category = require('./Category');
-const Tag = require('./Tag');
-const ProductTag = require('./ProductTag');
-const fs = require('fs');
-const path = require('path');
-const sequelize = require('../config/connection');
-
-
+const Product = require("./Product");
+const Category = require("./Category");
+const Tag = require("./Tag");
+const Product_Tags = require("./Product_Tags");
 
 // =============ASSOCIATIONS================
-
 // Products belongsTo Category
 Product.belongsTo(Category, {
-  foreignKey: 'category_id'
+  foreignKey: {
+    key: "product_id",
+    allowNull: false,
+  },
 });
 
 // Categories have many Products
 Category.hasMany(Product, {
-  foreignKey: 'category_id'
+  foreignKey: {
+    key: "category_id",
+    allowNull: false,
+  },
 });
 
-// Products belongToMany Tags (through ProductTag)
+// Products belongToMany Tags (through Product_Tag)
 Product.belongsToMany(Tag, {
-  through: ProductTag,
-  as: 'product_tag',
-  foreignKey: 'tag_id'
+  onDelete: "cascade",
+  through: "product_tags",
+  foreignKey: "product_id",
+  as: "tags",
 });
 
-// Tags belongToMany Products (through ProductTag)
+// Tags belongToMany Products (through Product_Tag)
 Tag.belongsToMany(Product, {
-  through: ProductTag,
-  as: 'product_tag',
-  foreignKey: 'tag_id'
+  through: "product_tags",
+  foreignKey: "tag_id",
+  as: "tags",
 });
+
+Product_Tags.belongsTo(Product, { foreignKey: "product_id", as: "products" });
+Product_Tags.belongsTo(Tag, { foreignKey: "tag_id", as: "tags" });
 
 module.exports = {
   Product,
   Category,
   Tag,
-  ProductTag
+  Product_Tags,
 };
